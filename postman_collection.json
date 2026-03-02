@@ -1,0 +1,98 @@
+{
+  "info": {
+    "name": "Scalable Synchronous Microservice - APIs",
+    "_postman_id": "scalable-synchronous-microservice",
+    "description": "Postman collection for Driver creation and Ride booking APIs.\n\nBase URL: http://localhost:8080",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Driver",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ravi\",\n  \"latitude\": 18.5204,\n  \"longitude\": 73.8567,\n  \"rating\": 4.7\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/drivers",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "drivers"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Ride (Synchronous)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 101,\n  \"pickupLatitude\": 18.5204,\n  \"pickupLongitude\": 73.8567\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/rides",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "rides"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Ride (Asynchronous)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 102,\n  \"pickupLatitude\": 19.076,\n  \"pickupLongitude\": 72.8777\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/rides/async",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "rides",
+            "async"
+          ]
+        }
+      }
+    }
+  ]
+}

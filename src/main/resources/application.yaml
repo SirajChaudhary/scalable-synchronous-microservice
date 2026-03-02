@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: scalable-synchronous-microservice
+
+  # ==========================
+  # DATASOURCE CONFIGURATION
+  # ==========================
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rides_db
+    username: postgres
+    password: siraj123
+
+    hikari:
+      maximum-pool-size: 60
+      minimum-idle: 15
+      idle-timeout: 30000
+      connection-timeout: 20000
+      max-lifetime: 1800000
+      pool-name: RideHikariCP
+
+      # ==============================
+      # Connection Pool Scaling Strategy
+      # ==============================
+      # - Increase pool size carefully based on DB CPU & memory.
+      # - Virtual threads allow high request concurrency
+      #   without OS thread exhaustion.
+      # - BUT DB connections are still physical resources.
+      # - If 10,000 virtual threads try DB access but pool = 60,
+      #   9,940 will wait for a connection.
+      # - Always load test before increasing pool size.
+      # - Monitor:
+      #     /actuator/metrics/hikaricp.connections.active
+      #     /actuator/metrics/hikaricp.connections.idle
+      # - For heavy read traffic, use read replicas.
+
+  # ==========================
+  # JPA / HIBERNATE
+  # ==========================
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false  # Recommended for scalability
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 50   # Improves batch insert/update performance
+        order_inserts: true
+        order_updates: true
+
+        # Important for scaling write-heavy workloads
+        # Reduces round trips to DB
+
+  # ==========================
+  # VIRTUAL THREADS (Spring Boot 3.2+)
+  # ==========================
+  threads:
+    virtual:
+      enabled: true
+      # Enables request handling using Java 21 virtual threads
+      # Helps scale blocking controllers efficiently
+
+
+# ==========================
+# ACTUATOR (Monitoring)
+# ==========================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,beans
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    enable:
+      hikari: true
